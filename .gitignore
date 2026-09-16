@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.tsbuildinfo
+work/
+.sites-runtime/
+.vercel/
+outputs/*.zip
+# Private credential files
+*firebase-adminsdk*.json
+*.pem
+*.p12
+*.pfx

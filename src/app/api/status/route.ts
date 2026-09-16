@@ -1,0 +1,5 @@
+import {NextRequest,NextResponse} from 'next/server';
+import {adminServices} from '@/lib/firebase-admin';
+import {lookupSchema} from '@/lib/schema';
+import {body,fail,HttpError,throttle,privateHeaders} from '@/lib/server';
+export async function POST(req:NextRequest){try {const input=lookupSchema.parse(await body(req)); const {db}=adminServices(); await throttle('lookup:'+input.reference,12); const snap=await db.doc(`registrations/${input.reference}`).get(); const p=snap.data(); if(!p || p.phone!==input.phone) throw new HttpError(404,'No matching registration. Check your reference and phone number.'); return NextResponse.json({reference:p.reference,workshopTitle:p.workshopTitle,paymentStatus:p.paymentStatus,price:p.price,attendance:p.attendance,certificate:p.certificate??null},{headers:privateHeaders});}catch(e){return fail(e);}}

@@ -1,0 +1,1 @@
+export default function Loading(){return <div className="wrap page-content" role="status" aria-live="polite"><div className="skeleton"/><p>Loading your next step…</p></div>}
