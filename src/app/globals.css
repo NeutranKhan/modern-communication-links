@@ -19,3 +19,5 @@
 @media print{body:has(.certificate-preview) .lookup-shell>form,body:has(.certificate-preview) .lookup-shell>.fine{display:none}.certificate-preview{break-inside:avoid}}
 
 .share-controls{margin-top:20px;width:100%;min-width:0}.share-controls .button-row{gap:10px;align-items:center}.share-controls .text-link{font-size:.875rem}.admin-tabs{flex-wrap:wrap}
+
+.danger{color:#9b2619!important;border-color:#bc6a61!important}.delete-confirm{padding:20px;border:1px solid #bc6a61;border-radius:10px;background:#fff6f4;width:100%;margin-block:15px}.delete-confirm p{color:#782519}.admin .form-card{margin-bottom:20px}.admin .card h3{overflow-wrap:anywhere}

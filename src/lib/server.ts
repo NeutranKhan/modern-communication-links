@@ -3,7 +3,8 @@ import {createHmac} from 'node:crypto';
 import {NextRequest,NextResponse} from 'next/server';
 import {ZodError} from 'zod';
 import {adminServices} from './firebase-admin';
-export class HttpError extends Error { constructor(public status:number,message:string){super(message);} }
+import {HttpError} from './http-error';
+export {HttpError} from './http-error';
 export function hash(value:string) { return createHmac('sha256',process.env.LOOKUP_HASH_SECRET!).update(value).digest('hex'); }
 export async function body(req:NextRequest) { const origin=req.headers.get('origin'); if (!process.env.APP_URL || origin !== new URL(process.env.APP_URL).origin) throw new HttpError(403,'Request origin was not accepted. Refresh this page and try again.'); const raw=await req.text(); if(raw.length>65000) throw new HttpError(413,'Request is too large.'); try { const parsed=JSON.parse(raw); if(!parsed || typeof parsed!=='object' || Array.isArray(parsed)) throw new Error(); return parsed; } catch {throw new HttpError(400,'Invalid request.');} }
 export async function requireAdmin(req:NextRequest) { const token=req.headers.get('authorization')?.replace(/^Bearer /,''); if(!token) throw new HttpError(401,'Sign in to continue.'); try {const user=await adminServices().auth.verifyIdToken(token,true); if(user.admin !== true) throw new Error(); return user.uid;} catch {throw new HttpError(403,'An administrator account is required.');} }

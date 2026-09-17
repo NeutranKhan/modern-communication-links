@@ -7,4 +7,4 @@ export const feedbackSchema=z.object({
  consent:z.literal(true),
  website:z.string().max(0).default('')
 });
-export type Feedback={id:string;name:string;email:string;rating:number;message:string;createdAt:string};
+export type Feedback={id:string;reviewed?:boolean;name:string;email:string;rating:number;message:string;createdAt:string};
