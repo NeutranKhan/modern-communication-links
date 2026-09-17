@@ -108,3 +108,14 @@ Add a custom domain later, update `APP_URL` and authorised domains, and redeploy
 - Firebase Admin setup: https://firebase.google.com/docs/admin/setup
 - Verify tokens: https://firebase.google.com/docs/auth/admin/verify-id-tokens
 - Firestore transactions: https://firebase.google.com/docs/firestore/manage-data/transactions
+## Search, sharing, and visitor feedback
+
+The canonical public domain is https://moderncommunicationlinks.com (src/lib/site.ts). Set Vercel APP_URL to https://moderncommunicationlinks.com for form submissions; keep localhost for local development. Redirect any older Vercel domain and www variant to the primary domain in Vercel.
+
+After deployment, add moderncommunicationlinks.com as a Domain property in Google Search Console and verify with the DNS TXT record Google supplies. Alternatively, verify a URL-prefix property using the HTML-tag token in GOOGLE_SITE_VERIFICATION and redeploy. Submit https://moderncommunicationlinks.com/sitemap.xml, then inspect the homepage and request indexing. Google decides whether and when to index pages; this code does not submit the property for you. See https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl.
+
+Public pages include canonical URLs and social previews. robots.txt advertises the sitemap. Admin, registration status, certificate lookup, and registration forms have noindex metadata. Share/Copy link controls on public workshop cards and published admin workshop cards create direct registration links suitable for Facebook ads, WhatsApp, and messages. The general invitation link is https://moderncommunicationlinks.com/workshops. These are invitation links, not referral attribution tracking.
+
+Visitors can submit private feedback at /feedback without an account. Admin > Feedback lists newest messages with pagination. Firestore feedback/{autoId} stores name, optional email, rating (1–5), message, and createdAt (ISO timestamp). Server validation, consent, a honeypot, and an hourly hashed-IP submission limit protect the endpoint. Existing deny-all client Firestore rules cover this collection; reads require a verified admin token through /api/feedback. No extra index or Firebase product is required. Messages are not automatically published. Staff can delete feedback in Firestore when requested and should retain it only as long as needed.
+
+Check: npm test, npm run test:runtime, npm run build. After deploying, submit a test feedback message, verify it appears in Admin > Feedback, copy a published workshop link and confirm that it selects that workshop, and check the corrected phone/WhatsApp link. Test feedback can be deleted from Firestore afterward.
