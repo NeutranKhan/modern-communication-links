@@ -1,4 +1,5 @@
-import {contentPatch} from '@/lib/content-sections';
+import {revalidatePath} from 'next/cache';
+import {contentPatch,removeGalleryPhoto} from '@/lib/content-sections';
 import {randomBytes} from 'node:crypto';
 import {NextRequest,NextResponse} from 'next/server';
 import {adminServices} from '@/lib/firebase-admin';
@@ -36,6 +37,19 @@ export async function POST(req:NextRequest){try{const uid=await requireAdmin(req
   return code;
  });
  return NextResponse.json({ok:true,certificateCode},{headers:privateHeaders});
+ }
+ else if(data.action==='galleryRemove'){
+ const ref=db.doc('content/site');
+ const gallery=await db.runTransaction(async tx=>{
+  const current=await tx.get(ref);
+  const remaining=removeGalleryPhoto(current.data()?.gallery??[],data.value);
+  if(!remaining)throw new HttpError(409,'The gallery changed since you opened it. Reload the admin page before removing this photo.');
+  tx.set(ref,{gallery:remaining},{merge:true});
+  tx.create(db.collection('auditLogs').doc(),{action:'galleryRemove',uid,at:new Date().toISOString()});
+  return remaining;
+ });
+ revalidatePath('/gallery');
+ return NextResponse.json({ok:true,gallery},{headers:privateHeaders});
  }
  else if(data.action==='contentSection'){const patch=contentPatch(data.value);const ref=db.doc('content/site');await db.runTransaction(async tx=>{const current=await tx.get(ref);tx.set(ref,current.exists?patch:{...defaultContent,...patch},{merge:true});tx.create(db.collection('auditLogs').doc(),{action:'contentSection',section:data.value.section,uid,at:new Date().toISOString()});});}
  else if(data.action==='content'){const content=contentSchema.parse(data.value);const batch=db.batch();batch.set(db.doc('content/site'),content);batch.create(db.collection('auditLogs').doc(),{action:'content',uid,at:new Date().toISOString()});await batch.commit();}
