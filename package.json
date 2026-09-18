@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "9.1.0",
+    "@vercel/analytics": "2.0.1",
+    "@vercel/blob": "2.8.0",
     "firebase": "latest",
     "firebase-admin": "14.4.0",
     "lucide-react": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "sharp": "0.35.4",
     "zod": "latest"
   },
   "devDependencies": {

@@ -132,3 +132,17 @@ Check: npm test, npm run test:runtime, npm run build. After deploying, submit a 
 New endpoints /api/admin/manage and /api/admin/settings require verified admin authentication. Mutations also enforce the existing APP_URL origin check. Existing deny-all Firestore client rules protect the new settings document. No new indexes or Firebase products are required.
 
 Validation includes in-memory transaction regression tests for seat counts, certificate/key cleanup, duplicate-phone conflicts, protected workshop deletion, feedback moderation, input validation, and CSV escaping. These tests do not modify production Firestore. After deployment, exercise the new controls using disposable test records before deleting real records; permanent deletion has no undo.
+
+## Upload gallery images, trainer photos, signatures, and certificate files
+
+Connect a PUBLIC Vercel Blob store to this project's Production environment. Confirm BLOB_READ_WRITE_TOKEN exists in Vercel Environment Variables and redeploy after connecting. Keep the token server-only; never paste it into source code or a NEXT_PUBLIC variable. For local upload testing, add the token privately to .env.local. Builds and validation tests do not need this token.
+
+In Admin > Content, use Upload image beside a trainer profile/signature or inside a gallery item. For certificates, open Admin > Participants > Manage and use Upload certificate file. Uploading fills the URL field; click Save website content or Issue/Save certificate to attach it. Uploading alone does not publish a gallery item or issue a certificate. Existing HTTPS links remain supported.
+
+Files must be at most 4 MB. Photos accept still JPEG, PNG, or WebP; certificate files also accept PDF. Images are decoded, auto-oriented, stripped of metadata, and resized to at most 2000 pixels (4000 for certificate images), preserving transparency. Certificate images use lossless WebP; PDFs retain their original bytes. PDF validation checks file markers; it is not a malware scan. The endpoint verifies staff authentication, request origin, rate limits, file sizes (including streamed bodies), and image contents before writing to Blob.
+
+This uses public storage: anyone with a file URL can open it, including certificate files and signatures. Public verification consent controls certificate lookup, not access to the uploaded file URL. Use only files intended for sharing. Deleting/replacing a gallery item or certificate record does not delete the underlying Blob file, because it may still be referenced elsewhere. Remove unused files in Vercel > Storage > your Blob store after checking references, including certificates. Unsaved uploads also remain there.
+
+If upload reports missing configuration, reconnect the store for Production and redeploy. If it reports a store error, confirm the store is Public and check usage limits. Ensure APP_URL matches the exact live site origin. No Firebase Storage setup or Firestore rule changes are required.
+
+Vercel Web Analytics is mounted once in the root layout using @vercel/analytics/next. Enable Web Analytics in the Vercel project (already done by the owner); page views start after deployment. The mobile menu closes on outside tap/click, outside keyboard focus, Escape, and link navigation.
