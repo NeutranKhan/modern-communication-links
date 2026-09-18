@@ -135,7 +135,7 @@ Validation includes in-memory transaction regression tests for seat counts, cert
 
 ## Upload gallery images, trainer photos, signatures, and certificate files
 
-Connect a PUBLIC Vercel Blob store to this project's Production environment. Confirm BLOB_READ_WRITE_TOKEN exists in Vercel Environment Variables and redeploy after connecting. Keep the token server-only; never paste it into source code or a NEXT_PUBLIC variable. For local upload testing, add the token privately to .env.local. Builds and validation tests do not need this token.
+Connect a PUBLIC Vercel Blob store to this project's Production environment. This project accepts the custom mcl_photos_STORE_ID connection and uses Vercel OIDC in deployed environments, without requiring a long-lived token. The default BLOB_STORE_ID is also supported. Redeploy after connecting so the store ID is available. For local upload testing outside Vercel, optionally set mcl_photos_READ_WRITE_TOKEN (or BLOB_READ_WRITE_TOKEN for default-prefix connections) privately in .env.local. Keep tokens server-only; never paste them into source code or NEXT_PUBLIC variables. Builds and validation tests need no credentials.
 
 In Admin > Content, use Upload image beside a trainer profile/signature or inside a gallery item. For certificates, open Admin > Participants > Manage and use Upload certificate file. Uploading fills the URL field; click Save website content or Issue/Save certificate to attach it. Uploading alone does not publish a gallery item or issue a certificate. Existing HTTPS links remain supported.
 
