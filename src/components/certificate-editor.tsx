@@ -13,8 +13,8 @@ export function CertificateEditor({participant:p,busy,onSave}:{participant:Parti
   {certificate&&<p className="reference">{certificate.code}</p>}
   <div className="two-grid"><label>Completion date<input type="date" name="completionDate" required max={new Date().toISOString().slice(0,10)} defaultValue={certificate?.completionDate??new Date().toISOString().slice(0,10)}/></label>
   <label>Certificate status<select name="status" defaultValue={certificate?.status??'valid'}><option value="valid">Issued / valid</option>{certificate&&<option value="revoked">Revoked</option>}</select></label></div>
-  <label>Certificate PDF or image link (optional)<input type="url" name="certificateUrl" placeholder="https://…" value={url} onChange={e=>setUrl(e.target.value)}/></label>
-  <FileUpload certificate onUploaded={setUrl} onBusy={setUploading}/><p className="fine">Upload your designed certificate or paste its HTTPS link. Save the certificate to attach it to this participant. Public verification consent controls the lookup page; anyone with the uploaded file link can still open it.</p>
+  <input type="hidden" name="certificateUrl" value={url}/>
+  <FileUpload certificate value={url} onUploaded={setUrl} onBusy={setUploading}/><p className="fine">Upload your designed certificate. Save the certificate to attach it to this participant. Public verification consent controls the lookup page; anyone with the uploaded file link can still open it.</p>
   <label className="checkbox-label"><input name="completionConfirmed" type="checkbox" required/>I confirm this participant completed the training.</label>
   <label className="checkbox-label"><input name="publicVerificationConsent" type="checkbox" defaultChecked={certificate?.publicVerificationConsent??false}/>The participant consents to public verification of their name, course and certificate.</label>
   <button className="button" disabled={busy}>{busy?'Saving…':certificate?'Save certificate':'Issue certificate'}</button>

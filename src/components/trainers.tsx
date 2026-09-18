@@ -1,0 +1,2 @@
+import type {Content} from '@/lib/schema';
+export function Trainers({content}:{content:Content}){return <div className="two-grid">{content.trainers.map((t,i)=><article className="trainer" key={i}>{t.photoUrl?<img src={t.photoUrl} alt={t.name} loading="lazy" width={100} height={100}/>:<div className="avatar" aria-hidden="true">{t.name.split(' ').map(n=>n[0]).join('')}</div>}<div><h3>{t.name}</h3><p className="trainer-title">{t.title||'Trainer profile coming soon'}</p><p>{t.bio||'A full introduction will be added here soon.'}</p></div></article>)}</div>}

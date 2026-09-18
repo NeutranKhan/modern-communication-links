@@ -23,3 +23,5 @@
 .danger{color:#9b2619!important;border-color:#bc6a61!important}.delete-confirm{padding:20px;border:1px solid #bc6a61;border-radius:10px;background:#fff6f4;width:100%;margin-block:15px}.delete-confirm p{color:#782519}.admin .form-card{margin-bottom:20px}.admin .card h3{overflow-wrap:anywhere}
 
 .upload-fieldset{border:0;padding:0;margin:0;min-width:0}.upload-control{padding:14px;background:var(--pale);border-radius:8px;margin:12px 0 20px}.upload-control label{margin-bottom:8px}
+
+.upload-preview{display:block;width:100%;max-width:420px;max-height:260px;object-fit:contain;background:white;border:1px solid var(--border);border-radius:8px;margin-bottom:16px}.upload-success{background:#eaf7ef;border-color:#70a887;color:#174a2b}.upload-control progress{width:100%;accent-color:var(--primary)}
